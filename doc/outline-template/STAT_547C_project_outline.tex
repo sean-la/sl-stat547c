@@ -39,11 +39,11 @@ This design feature is the key reason why convolutional neural networks have ach
 In the last decade, there has been much work in expanding mathematical understanding of deep learning algorithms.
 Deep learning algorithms can be formalized under two separate (but not mutually exclusive) points of views: they can be viewed as deterministic functions $f: \mathcal{X} \to \mathcal{Y}$ where $\mathcal{X}$ is the set of input features and $\mathcal{Y}$ is the set of labels, or they can be viewed from a probabilistic point of view so that $Y = f(X, \eta)$, where $X$ and $Y$ are the input and output random variables, and $\eta$ is some outsourced noise random variable.
 
-Viewing deep learning algorithms deterministically, Kondor and Trivedi \cite{kondor2018generalization} proved that the incorporation of convolution functions is both necessary and sufficient for the layers of a neural network $y = f(x)$ to be equivariant.
+Viewing deep learning algorithms deterministically, Kondor and Trivedi \cite{kondor2018generalization} proved that $f$ containing a convolution operation $\int f(uv^{-1})g(v)$ is both necessary and sufficient for the layers of a neural network $y = f(x)$ to be equivariant.
 On the other hand, when viewed from a probabilistic point of view, Bloem-Reddy and Teh \cite{bloemreddy2019probabilistic} provided necessary and sufficient conditions for a neural network $Y = f(X, \eta)$ to be invariant or equivariant under the actions of a compact group.
 
 The conditions posed by Bloem-Reddy and Teh on the structure of $Y = f(X, \eta)$ are quite general and do not, by themselves, restrict $f$ to be a function involving convolution, as is the case in Kondor and Trivedi's results.
-Then, a natural question to ask is: what further conditions are necessary on $Y = f(X, \eta)$ so that $f$ is restricted to functions involving convolution?
+Then, a natural question to ask is: what further conditions on $Y = f(X, \eta)$ are necessary so that $f$ is restricted to functions involving convolution?
 %%%%%%%%%%%%%%%%%%%
 \section{Technical aspects}
 
