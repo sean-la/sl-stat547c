@@ -3,7 +3,112 @@
 % Background section
 
 \section{Background}
+Deep learning has revolutionized the research field of machine learning due to its great accuracy and generalizability on large, high dimensional datasets. 
+The convolutional neural network (CNN) architecture has become the mainstay for constructing computer vision platforms. 
+The chief design principle of CNNs is the incorporation of convolutional layers that allow the network to detect certain features in the input
+image. 
+In particular, these convolutional layers are equivariant under translation of the image, in the sense that translation of the input image causes the activations of the convolutional layers to translate in the same way. 
+This design feature is the key reason why convolutional neural networks have achieved excellent generalizability on a variety of datasets.
+
+In the last decade, there has been much work in expanding mathematical understanding of deep learning algorithms. 
+Deep learning algorithms can be formalized under two separate (but not mutually exclusive) points of views: they can be viewed as deterministic functions $f : \mathcal{X} \to \mathcal{Y}$ where $\mathcal{X}$ is the set of input features and $\mathcal{Y}$ is the set of labels, or they can be viewed from a probabilistic point of view so that $Y = f(\eta,X)$, where $X$ and $Y$ are the input and output random variables, and η is some outsourced noise random variable.
+Viewing deep learning algorithms deterministically, Kondor and Trivedi proved that $f$ containing a convolution operation of the form $(h * g)(u) = \int h(uv^{-1})g(v)\ dv$ is both necessary and sufficient for the layers of a neural network
+$y = f(x)$ to be equivariant \cite{kondor2018generalization}. 
+
+On the other hand, when viewed from a probabilistic point of view, Bloem-Reddy and Teh provided necessary and sufficient conditions for a neural network $Y = f(\eta,X)$ to be invariant or equivariant under the actions of a compact group \cite{bloemreddy2019probabilistic}.
+The conditions posed by Bloem-Reddy and Teh on the structure of $Y = f(X, \eta)$ are quite general and do not, by themselves, restrict $f$ to be a function involving convolution, as is the case in of the results of Kondor and Trivedi. 
+Then, a natural question to ask is: \textit{what further conditions on $Y = f(X, \eta)$ are necessary so that $f$ is restricted to functions involving convolutions?}
+
+In this project, we answer this question by providing a sufficient condition that is both simple and intuitive: linearity of $f$ in the second argument (i.e. $f(\eta, X_1 + X_2) = f(\eta, X_1) + f(\eta, X_2))$.
+The project report proceeds as follows.
+First, we give a brief overview of mathematical concepts that will be useful for understanding the rest of the report.
+Then, we summarize the main results of \cite{bloemreddy2019probabilistic}.
+After that, we provide key definitions and theorems from \cite{kondor2018generalization} that will prove useful for proving our main result.
+Penultimately, we prove that linearity of $Y = f(\eta,X)$ in the second argument is a sufficient condition for $Y = X * \chi(\eta)$, i.e. $Y$ is a convolution involving $X$.
+Finally, we provide open questions and future research directions.
+
+\subsection{A gentle introduction to group theory}
+The results of both \cite{bloemreddy2019probabilistic} and \cite{kondor2018generalization} are very mathematics-heavy and involve results from a wide variety of fields of mathematics, namely group theory, fourier analysis, representation theory, and of course, probability theory.
+In this report, we assume the reader has a good working knowledge of probability theory, but it may be too much for us to ask for a background in these other subjects as well.
+So then, before we get into the thick of things, we give a brief overview of group theory and how it relates to symmetry.
+Note that we will not cover fourier analysis nor representation theory, as they are not necessary to understand the main definitions and theorems of \cite{bloemreddy2019probabilistic} or \cite{kondor2018generalization}.
+
+\begin{definition}
+A group is a set of elements $G$ along with a binary operator $\cdot : G \times G \to G$ so that for every $u,v \in G$, we have $u \cdot v = w \in G$.
+For succintness, we denote a group by the pair $(G,\cdot)$.
+Moreover, we assume the existence of two types of elements in $G$:
+\begin{itemize}
+	\item
+	there exists an element $e \in G$ (which we call the identity element) so that for every $u \in G$, $e \cdot u = u \cdot e = u$, and
+	\item
+	for every $u \in G$, there exists its inverse $u^{-1} \in G$ so that $u \cdot u^{-1} = u^{-1} \cdot u = e$.
+\end{itemize}
+\end{definition}
+
+\begin{example}
+An example of a group is the integers equipped with addition, i.e. $(\mathbb{Z}, +)$ is a group.
+In this case, $0$ is the identity since $z + 0 = z$ for every $z \in \mathbb{Z}$, and every element in $\mathbb{Z}$ has an inverse $-z := z^{-1}$ so that $z + (-z) = 0$.
+Note that the integers equipped with multiplication is not a group, since the only integer that has an inverse that is also an integer is $1$.
+\end{example}
 
 
+\subsubsection{Everything you need to know about fourier analysis and representation theory}
+
+\subsection{Probabilistic symmetry in machine learning}
+
+\subsection{Deterministic symmetry in machine learning}
+In the deterministic view of machine learning, a machine learning algorithm is considered to be a function $f: \mathcal{X} \times \Theta \to \mathcal{Y}$ which maps an input object $x \in \mathcal{X}$ and parameters of the algorithm $\theta \in \Theta$ to a label $y \in \mathcal{Y}$, so that $y = f(x;\theta)$.
+There is no randomness captured in this formulation of machine learning, and so we provide no distributional assumptions on $\mathcal{X}$ nor $\mathcal{Y}$.
+
+\begin{definition} \label{def:nn}
+	Let $\mathcal{X}_0, \ldots, \mathcal{X}_L$ be a sequence of index sets, $V_0, \ldots, V_L$ vector spaces, $\phi_1, \ldots, \phi_L$ linear maps
+	$$
+		\phi_\ell: L_{V_{\ell-1}}(\mathcal{X}_{\ell - 1}) \to L_{V_{\ell}}(\mathcal{X}_{\ell})
+	$$
+	and $\sigma_{\ell}: V_{\ell} \to V_{\ell}$ pointwise nonlinear functions.
+	A multi-layer feed-forward neural network (MFF-NN) is a sequence of maps $f_0 \mapsto f_1 \mapsto f_2 \mapsto \ldots, \mapsto f_L$, where
+	$$
+		f_{\ell}(x) = \sigma_{\ell}( \phi_{\ell}(f_{\ell-1})(x))
+	$$
+\end{definition}
+
+\begin{definition} \label{def:equi_nn}
+	Let $G$ be a group and $\mathcal{X}_1, \mathcal{X}_2$ be two sets with corresponding $G$-actions
+	$$
+		T_g: \mathcal{X}_1 \to \mathcal{X}_1,\ T_g' : \mathcal{X}_2 \to \mathcal{X}_2.
+	$$
+	Let $V_1$ and $V_2$ be vector spaces, and $\bbT$ and $\bbT'$ be the induced actions on $G$ on $L_{V_1}(\mathcal{X}_1)$ and $L_{V_2}(\mathcal{X}_2)$.
+	We say that a map $\phi: L_{V_1}(\mathcal{X}_1) \to L_{V_2}(\mathcal{X}_2)$ is equivariant with the action of $G$ (or $G$-equivariant for short) if
+	$$
+		\phi(\bbT_g(f)) = \bbT'_g(\phi(f))\ \forall f \in L_{V_1}(\mathcal{X}_1)
+	$$
+	for any group element $g \in G$.
+\end{definition}
+
+\begin{definition}
+	Let $\mathcal{N}$ be a feed-forward neural network as defined in Definition \ref{def:nn}, and $G$ be a group that acts on each index space $\mathcal{X}_0,\ldots,\mathcal{X}_L$.
+	Let $\bbT^0,\ldots,\bbT^L$ be the corresponding group actions on $L_{V_0}(\mathcal{X}_0),\ldots,L_{V_L}(\mathcal{X}_L)$.
+	$\mathcal{N}$ is a $G$-equivariant feed-forward network if, when the inputs are transformed $f_0: \mapsto \bbT_g^0(f_0)$ for any $g \in G$, the activations of the other layers correspondingly transform as $f_\ell \mapsto \bbT_g^\ell(f_{\ell})$.
+\end{definition}
+
+\begin{definition} \label{def:convolution}
+	Let $G$ be a finite or countable group, $\mathcal{X}$ and $\mathcal{Y}$ be (left or right) quotient spaces of $G$, $f: \mathcal{X} \to \bbC$, and $g: \mathcal{Y} \to \bbC$.
+	We then define the convolution of $f$ with $g$ as
+	$$
+		(f * g)(u) = \sum_{v \in G} f \uparrow^G(uv^{-1})g\uparrow^G(v)
+	$$
+	for some $u \in G$
+\end{definition}
+
+\begin{definition}
+	Let $G$ be a compact group and $\mathcal{N}$ an $L+1$ layer feed-forward network in which the $i$th index set is $G/H_i$ for some subgroup $H_i$ of $G$.
+	We say that $\mathcal{N}$ is a $G$-convolutional neural network (or $G$-CNN) if each of the linear maps $\phi_1,\ldots,\phi_L$ in $\mathcal{N}$ is a generalized convolution (see definition \ref{def:convolution}) of the form $\phi_{\ell}(f_{\ell-1}) = f_{\ell-1} * \chi_{\ell}$ with some filter $\chi_{\ell} \in L_{V_{\ell-1} \times V_{\ell}}(H_{\ell-1}\setminus G/H_{\ell})$.
+\end{definition}
+
+
+\begin{theorem} \label{thm:gcnn}
+	Let $G$ be a compact group and $\mathcal{N}$ be an $L+1$ layer feed-forward neural network in which the $\ell$th index set is of the form $\mathcal{X}_{\ell} = G / H_{\ell}$, where $H_{\ell}$ is some subgroup of $G$.
+	Then $\mathcal{N}$ is equivariant to the action of $G$ in the sense of definition \ref{def:equi_nn} if and only if it is a $G$-CNN.
+\end{theorem}
 
 % ...

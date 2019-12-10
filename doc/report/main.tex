@@ -13,9 +13,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % your title/author/date information go here
-\title{\LaTeX\ Template for STAT 547C Final Project} % replace with your title
-\author{Benjamin Bloem-Reddy} % replace with your name
-\date{\today} % replace with your submission date
+\title{Probabilistic symmetry and convolutional neural networks} % replace with your title
+\author{Sean La} % replace with your name
+\date{11 December 2019} % replace with your submission date
 
 \bibliography{../../ref/STAT_547C.bib} % add the title of your bibliography file
 
@@ -28,6 +28,84 @@
 \include{sections/background}
 
 % add your main body sections here
+\section{A sufficient condition for convolution structure of $Y$}
+First, we give an essential definition.
+\begin{definition} \label{def:linear}
+	A function $h: E \to F$ is linear if for $x_1, x_2 \in E$, we have
+	$$
+		h(x_1 + x_2) = h(x_1) + h(x_2)
+	$$ 
+	for all $x_1,x_2 \in E$.
+\end{definition}
+In this section, we show that equivariant $Y = f(\eta,X)$ being linear in its second argument, i.e.
+$$
+	Y = f(\eta, X_1 + X_2) = Y = f(\eta,X_1) + f(\eta,X_2),
+$$
+is a sufficient condition for $Y$ to be a convolution of $X$, i.e.
+$$
+	Y \equas X * \chi(\eta).
+$$
+\begin{theorem}
+	Consider random vectors $(X,Y)$ with index sets $\mathcal{I}_X$ and $\mathcal{I}_Y$ and a compact group $G$ which acts on $\mathcal{I}_X$ and $\mathcal{I}_Y$.
+	Moreover, suppose that $P_{X,Y}$ is $G$-equivariant.
+	Lastly, suppose that the action of $G$ on both $\mathcal{I}_X$ and $\mathcal{I}_Y$ is transitive.
+	Then if, conditioned on $X$, $Y = f(\eta, X)$ is a linear function almost surely (i.e. for some almost sure subset of the range of $\eta$), then $Y \equas X * \chi(\eta)$ in the sense of definition \ref{def:convolution}.
+	More generally, $(X,Y) \equas (X,X * \chi(\eta))$.
+\end{theorem}
+\begin{proof}
+Let $F(X) = f(\eta, X)$ be some realization of $Y$ so that $F(\cdot) = f(\eta, \cdot)$ is linear and $gY = f(\eta,gX)$ (the set of all such realizations has probability one since $Y$ is linear almost surely and $gY = f(\eta,gX)$ almost surely).
+We prove this theorem by constructing an appropriate MFF-NN as in definition \ref{def:nn}, and then invoking theorem \ref{thm:gcnn}.
+
+We may consider $X$ to be a function of its index set so that $X(i)$ gives the value of $X$ at component $i$ for $i \in \mathcal{I}_X$.
+Likewise, we view $Y$ as a function of its index set $\mathcal{I}_{Y}$ in the same way.
+Then the linear function $F$ can be seen as a function from the space of functions on $\mathcal{I}_{X}$ to the space of functions on $\mathcal{I}_Y$.
+Lastly, we set the function $\sigma$ to be simply the identity function.
+Then we define our MFF-NN $\mathcal{N}$ by the sequence of maps
+$$
+	X := f_0 \mapsto f_1 =: F(X) = Y
+$$
+where
+$$
+	Y(i) = F(X)(i) = \sigma(F(X)(i)).
+$$
+for $i \in \mathcal{I}_Y$.
+Clearly, this construction matches the description of a MFF-NN given in definition \ref{def:nn}.
+
+Now, define the action of group $G$ on $X$ to be the action of $G$ on its index set, so that
+$$
+	gX := \bbT_g(X) = X(g\cdot i)
+$$
+for $i \in \mathcal{I}_{X}$ and $g \in G$.
+Similarly, define the action of $G$ on $Y$ as the action of $G$ on the its index set $\mathcal{I}_Y$, so that
+$$
+	gY := \bbT'_g(Y) = Y(g \cdot i)
+$$
+for $i \in \mathcal{I}_{Y}$ and $g \in G$.
+By assumption, we have
+$$
+	\bbT'_g(Y) = gY = F(gX) = F(\bbT_g(X))
+$$
+for all $g \in G$ since $P_{X,Y}$ is $G$-equivariant.
+Therefore, the layers of $\mathcal{N}$ is equivariant under the action of $G$.
+
+Because the actions of $G$ on both $\mathcal{I}_{X}$ and $\mathcal{I}_{Y}$ are transitive, we may identify the index sets of $X$ and $Y$ by quotient groups $G/H_X$ and $G/H_Y$, where $H_X$ and $H_Y$ are the stabilizer subgroups of elements chosen to be the origins of $\mathcal{I}_X$ and $\mathcal{I}_Y$, respectively.
+
+Therefore, by theorem \ref{thm:gcnn}, our MFF-NN $\mathcal{N}$ is a $G$-CNN, i.e. we have
+$$
+	F(X) = X * \chi
+$$
+for some filter $\chi \in L_{V_{\ell-1} \times V_{\ell}}(H_{\ell-1} \setminus G / H_{\ell})$.
+Letting the value of $\eta$ to vary over the subset of its range that gives $f(\eta,X)$ to be linear in $X$, it is easy to see that
+$$
+	f(\eta,X) = X * \chi(\eta).
+$$
+Take $\Omega_0 \subseteq \Omega$ such that $f(\eta,X)$ is both linear and equivariant under the action of $G$.
+Because every $\omega \in \Omega_0$ gives that $Y(\omega) = X(\omega) * \chi(\eta(\omega))$ and $\P(\Omega_0) = 1$, we have
+$$
+	(X,Y) \equas (X,X * \chi(\eta))
+$$
+which finishes the proof.
+\end{proof}
 
 % open questions section
 \include{sections/open-questions}
