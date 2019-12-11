@@ -1,4 +1,4 @@
-# stat547c-project-template
+## stat547c-project-template
 Project directory and LaTeX template for UBC STAT 547C Final Project reports
 
 ## Instructions for use:
