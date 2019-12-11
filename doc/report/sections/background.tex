@@ -11,38 +11,45 @@ In particular, these convolutional layers are equivariant under translation of t
 This design feature is the key reason why convolutional neural networks have achieved excellent generalizability on a variety of datasets.
 
 In the last decade, there has been much work in expanding mathematical understanding of deep learning algorithms. 
-Deep learning algorithms can be formalized under two separate (but not mutually exclusive) points of views: they can be viewed as deterministic functions $f : \mathcal{X} \to \mathcal{Y}$ where $\mathcal{X}$ is the set of input features and $\mathcal{Y}$ is the set of labels, or they can be viewed from a probabilistic point of view so that $Y = f(\eta,X)$, where $X$ and $Y$ are the input and output random variables, and η is some outsourced noise random variable.
+Machine learning algorithms in general can be formalized under two separate points of views: they can be viewed as deterministic functions $f : \mathcal{X} \to \mathcal{Y}$ where $\mathcal{X}$ is the set of input features and $\mathcal{Y}$ is the set of labels, or they can be viewed from a probabilistic point of view so that $Y = f(\eta,X)$, where $X$ and $Y$ are the input and output random variables, and $\eta$ is some outsourced noise random variable.
 Viewing deep learning algorithms deterministically, Kondor and Trivedi proved that $f$ containing a convolution operation of the form $(h * g)(u) = \int h(uv^{-1})g(v)\ dv$ is both necessary and sufficient for the layers of a neural network
-$y = f(x)$ to be equivariant \cite{kondor2018generalization}. 
+$y = f(x)$ to be equivariant under the action of a compact group $G$\cite{kondor2018generalization}. 
 
-On the other hand, when viewed from a probabilistic point of view, Bloem-Reddy and Teh provided necessary and sufficient conditions for a neural network $Y = f(\eta,X)$ to be invariant or equivariant under the actions of a compact group \cite{bloemreddy2019probabilistic}.
-The conditions posed by Bloem-Reddy and Teh on the structure of $Y = f(X, \eta)$ are quite general and do not, by themselves, restrict $f$ to be a function involving convolution, as is the case in of the results of Kondor and Trivedi. 
-Then, a natural question to ask is: \textit{what further conditions on $Y = f(X, \eta)$ are necessary so that $f$ is restricted to functions involving convolutions?}
+On the other hand, when viewed from a probabilistic point of view, Bloem-Reddy and Teh provide necessary and sufficient conditions for a neural network $Y = f(\eta,X)$ to be invariant or equivariant under the action of a compact group \cite{bloemreddy2019probabilistic}.
+The conditions posed by Bloem-Reddy and Teh on the structure of $Y = f(\eta, X)$ are quite general and do not, by themselves, restrict $f$ to be a function involving convolution, as is the case in of the results of Kondor and Trivedi. 
+Then, a natural question to ask is: \textit{what further conditions on $Y = f(\eta, X)$ are needed so that $f$ is restricted to functions involving convolutions?}
 
-In this project, we answer this question by providing a sufficient condition that is both simple and intuitive: linearity of $f$ in the second argument (i.e. $f(\eta, X_1 + X_2) = f(\eta, X_1) + f(\eta, X_2))$.
+In this project, we answer this question by providing a condition that is both simple and intuitive: linearity of $f$ in the second argument (i.e. $f(\eta, X_1 + X_2) = f(\eta, X_1) + f(\eta, X_2))$.
+
 The project report proceeds as follows.
-First, we give a brief overview of mathematical concepts that will be useful for understanding the rest of the report.
+First, we give a brief overview of group theory that will be essential for understanding the main result of this project.
 Then, we summarize the main results of \cite{bloemreddy2019probabilistic}.
 After that, we provide key definitions and theorems from \cite{kondor2018generalization} that will prove useful for proving our main result.
-Penultimately, we prove that linearity of $Y = f(\eta,X)$ in the second argument is a sufficient condition for $Y = X * \chi(\eta)$, i.e. $Y$ is a convolution involving $X$.
+As the main scholarly contribution of this project, we prove that linearity of $Y = f(\eta,X)$ in the second argument, along with equivariance of $X$ and $Y$, are sufficient for $Y = X * \chi(\eta)$, i.e. $Y$ is a convolution involving $X$.
 Finally, we provide open questions and future research directions.
 
 \subsection{A gentle introduction to group theory}
 The results of both \cite{bloemreddy2019probabilistic} and \cite{kondor2018generalization} are very mathematics-heavy and involve results from a wide variety of fields of mathematics, namely group theory, fourier analysis, representation theory, and of course, probability theory.
-In this report, we assume the reader has a good working knowledge of probability theory, but it may be too much for us to ask for a background in these other subjects as well.
-So then, before we get into the thick of things, we give a brief overview of group theory and how it relates to symmetry.
+In this report, we assume the reader has a good working knowledge of probability theory, but it may be too much to ask for a background in these other subjects as well.
+So then, before we get into the thick of things, we give a brief overview of group theory, and how it relates to symmetry, which was derived from \cite{RomanSteven2012FoGT}.
 Note that we will not cover fourier analysis nor representation theory, as they are not necessary to understand the main definitions and theorems of \cite{bloemreddy2019probabilistic} or \cite{kondor2018generalization}.
 
-\begin{definition}
-A group is a set of elements $G$ along with a binary operator $\cdot : G \times G \to G$ so that for every $u,v \in G$, we have $u \cdot v = w \in G$.
+Group theory is the study of - \textit{you guessed it!} - mathematical objects called \textit{groups}, which we define below.
+
+\begin{definition} \label{def:group}
+A group is a set of elements $G$ along with a binary operator $\cdot : G \times G \to G$ that satisfies the following properties:
+\begin{enumerate}[label=(\alph*)]
+	\item
+	(\textit{Closure under the binary operator})
+	For every $u,v \in G$, we have $u \cdot v \in G$.
+	\item
+	(\textit{Existence of an identity element})
+	There exists an element $e \in G$ (which we call the identity element) so that for every $u \in G$, $e \cdot u = u \cdot e = u$, and
+	\item
+	(\textit{Existence of inverses})
+	For every $u \in G$, there exists its inverse $u^{-1} \in G$ so that $u \cdot u^{-1} = u^{-1} \cdot u = e$.
+\end{enumerate}
 For succintness, we denote a group by the pair $(G,\cdot)$.
-Moreover, we assume the existence of two types of elements in $G$:
-\begin{itemize}
-	\item
-	there exists an element $e \in G$ (which we call the identity element) so that for every $u \in G$, $e \cdot u = u \cdot e = u$, and
-	\item
-	for every $u \in G$, there exists its inverse $u^{-1} \in G$ so that $u \cdot u^{-1} = u^{-1} \cdot u = e$.
-\end{itemize}
 \end{definition}
 
 \begin{example}
@@ -51,64 +58,356 @@ In this case, $0$ is the identity since $z + 0 = z$ for every $z \in \mathbb{Z}$
 Note that the integers equipped with multiplication is not a group, since the only integer that has an inverse that is also an integer is $1$.
 \end{example}
 
+\noindent
+Groups are a natural tool to formalize and study the mathematics of symmetry and symmetry-preserving transformations.
 
-\subsubsection{Everything you need to know about fourier analysis and representation theory}
+\begin{example} \label{ex:symmetry_group}
+	Consider the set of rotations of a triangle in two dimensional space that are integer multiples of $120^{\circ}$, and call it $G$.
+	Clearly, if we rotate a triangle by any multiple of $120^{\circ}$, the image of the triangle will be preserved; in other words, these transformations preserve the symmetry of the triangle.
+	Notice that we can view the set of rotations by multiples of $120^{\circ}$ as a group in and of itself.
+	\begin{enumerate}
+	\item $G$ is closed under composition of rotations. 
+	If we rotate a triangle by $n120^{\circ}$ and then rotate it again by $m120^{\circ}$, we have rotated it in total by $(n+m)120^{\circ}$, another integer multiple of $120^{\circ}$.
+	Therefore, composition of rotations is itself a rotation.
+	
+	\item $G$ has an identity element, the $0 \cdot 120^{\circ}$ rotation.
+	
+	\item Every rotation $n120^{\circ}$ has an inverse rotation $-n120^{\circ}$.
+	\end{enumerate}
+\end{example}
 
-\subsection{Probabilistic symmetry in machine learning}
+\noindent
+Example \ref{ex:symmetry_group} gives an example of how a group can be formed by a set of symmetry-preserving \textit{transformations} of some object - in other words, the group \textit{acts} on this object, in a way.
+We formalize this notion of \textit{group action} below.
 
-\subsection{Deterministic symmetry in machine learning}
-In the deterministic view of machine learning, a machine learning algorithm is considered to be a function $f: \mathcal{X} \times \Theta \to \mathcal{Y}$ which maps an input object $x \in \mathcal{X}$ and parameters of the algorithm $\theta \in \Theta$ to a label $y \in \mathcal{Y}$, so that $y = f(x;\theta)$.
-There is no randomness captured in this formulation of machine learning, and so we provide no distributional assumptions on $\mathcal{X}$ nor $\mathcal{Y}$.
-
-\begin{definition} \label{def:nn}
-	Let $\mathcal{X}_0, \ldots, \mathcal{X}_L$ be a sequence of index sets, $V_0, \ldots, V_L$ vector spaces, $\phi_1, \ldots, \phi_L$ linear maps
-	$$
-		\phi_\ell: L_{V_{\ell-1}}(\mathcal{X}_{\ell - 1}) \to L_{V_{\ell}}(\mathcal{X}_{\ell})
-	$$
-	and $\sigma_{\ell}: V_{\ell} \to V_{\ell}$ pointwise nonlinear functions.
-	A multi-layer feed-forward neural network (MFF-NN) is a sequence of maps $f_0 \mapsto f_1 \mapsto f_2 \mapsto \ldots, \mapsto f_L$, where
-	$$
-		f_{\ell}(x) = \sigma_{\ell}( \phi_{\ell}(f_{\ell-1})(x))
-	$$
+\begin{definition} \label{def:group_action}
+	Consider a group $(G,\cdot)$ and a set $\mathcal{X}$.
+	A group action $\bbT : G \times \mathcal{X} \to \mathcal{X}$ is a function that satisfies the following properties
+	\begin{enumerate}
+	\item
+	$\bbT(e,x) = x$ for all $x \in \mathcal{X}$, where $e$ is the identity element, and
+	\item
+	$\bbT(u \cdot v,x) = \bbT(u, \bbT(v,x))$ for all $u,v \in G$, and $x \in \mathcal{X}$.
+	\end{enumerate}
+	When the context is clear, we will write $g x := \bbT_g(x) := \bbT(g,x)$.
 \end{definition}
 
+From here, we define two key concepts that are important in understanding the results of \cite{bloemreddy2019probabilistic} and \cite{kondor2018generalization}.
+
+\begin{definition} \label{def:orbit_stabilizer}
+Consider a group $G$ and set $\mathcal{X}$ upon which it acts through its group action $\bbT$.
+Take an element $x \in \mathcal{X}$.
+\begin{enumerate}
+	\item
+	The orbit of $x$ is the subset of $\mathcal{X}$ defined by
+	$$
+		G \cdot x := \{ \bbT(g,x) \in X : g \in G \}.
+	$$
+	\item
+	The stabilizer of $x$ is the subset of $G$ defined by
+	$$
+		G_x := \{ g \in G : \bbT(g,x) = x \}.
+	$$
+\end{enumerate}
+\end{definition}
+
+The orbit of an element $x$ with respect to a group $G$ can be thought of as all elements that can be reached from $x$ using $G$.
+One interesting property of stabilizers is that they form a \textit{subgroup} of $G$ - they satisfy all the properties described in definition \ref{def:group}.
+The proof of this is left as an exercise to the reader.
+
+We now describe the penultimate concept that will be important in understanding the main result of this project - the idea of a quotient group.
+
+\begin{definition} \label{def:quotient}
+Consider a group $(G,\cdot)$ and a subgroup $H$ of $G$.
+A left coset of $H$ is the set $gH = \{g\cdot h: h \in H\}$ for some $g \in G$.
+Then we define the left quotient group
+$$
+	G/H := \{ gH : g \in G \}
+$$
+which itself forms a group under the binary operation $\cdot$ defined by
+$$
+	g_1H \cdot g_2H := (g_1 \cdot g_2) H.
+$$
+\end{definition}
+Notice that if $g_2 \in g_1 H$, we can equivalently write $g_2H = g_1H$, so there does not necessarily exist a unique representation of the elements of $G/H$; the choice of representation is up to us.
+No matter; it is easy to see that the binary operation on $G/H$ borrowed from $G$ is still well-defined.
+
+Finally, we can view groups as \textit{topological objects} in similar vein as $\bbR$ or $\bbC$.
+\begin{definition} \label{def:compact}
+A topological space is defined as a set $\mathcal{X}$ and a collection of open sets $\mathcal{C}$.
+$(\mathcal{X}, \mathcal{C})$ is then said to be compact if for every collection of open sets $\mathcal{C}' \subseteq \mathcal{C}$ that covers $\mathcal{X}$, i.e.
+$$
+	X = \cup_{C \in \mathcal{C}'} C
+$$
+there exists a finite subcover $C'' \subseteq C'$ so that
+$$
+	X = \cup_{C \in \mathcal{C}''} C.
+$$
+A compact group is then a group $(G,\cdot)$ equipped with a collection of open sets $\mathcal{C}$ so that $G$ is compact with respect to $\mathcal{C}$.
+\end{definition}
+\noindent
+This concludes are brief foray into group theory.
+With these tools, we are now able to grasp the main results of \cite{bloemreddy2019probabilistic} and \cite{kondor2018generalization}.
+
+\subsection{Probabilistic symmetry}
+Symmetry is a natural concept in probability.
+For example, iid random variables exhibit an obvious symmetry in that the joint distribution of a collection of iid random variables $(X_1,\ldots,X_n)$ does not depend on the order in which we write the random variables, since
+$$
+ \prob(X_1,\ldots,X_n) = \prod_{i=1}^n \prob(X_i) = \prob(X_{\sigma(1)},\ldots,X_{\sigma(n)})
+$$
+for any permutation $\sigma$ on $\{1,\ldots,n\}$.
+In other words, this probability distribution is invariant under permutations of the random variables, when they are iid.
+
+An even stronger concept is \textit{exchangeability}.
+We say that a sequence of random variables $(X_1,\ldots,X_n)$ is \textit{exchangeable} if
+$$
+	\prob(X_1,\ldots,X_n) = \prob(X_{\sigma(1)},\ldots,X_{\sigma(n)})
+$$
+for any permutation $\sigma$.
+Note that in the definition of exchangeability, we do not assume that the the random variables $X_i$ are iid.
+
+We see that the joint distribution of an exchangeable sequence is \textit{invariant} when the exchangeable sequence is acted upon by the symmetry group $S_n$, the group of all permutations of $\{1,\ldots,n\}$.
+We can generalize this idea by considering the group action of a group $G$ on a set $\mathcal{X}$ of random variables, as per definition \ref{def:group_action}.
+Moreover, we can further expand the idea of group action into the language of probability by considering group actions that are $G$-measurable functions.
+We take the following definition from \cite{bloemreddy2019probabilistic}:
+\begin{definition}
+	A group $G$ along with a $\sigma$-algebra $\sigma(G)$ is measurable if the group operations
+	\begin{itemize}
+		\item inversion: $g \mapsto g^{-1}$, and
+		\item composition: $(g,h) \mapsto g \cdot h$
+	\end{itemize}
+	are measurable functions with respect to $\sigma(G)$-measurable.
+	Moreover, we say that $G$ acts measurably on $\mathcal{X}$ if $\bbT$ is a measurable function from $\sigma(G) \times \borel_{\mathcal{X}} \to \borel_{\mathcal{X}}$.
+\end{definition}
+
+Bloem-Reddy and Teh \cite{bloemreddy2019probabilistic} provide two definitions of probabilistic symmetry that are especially relevant to machine learning applications:
+
+\begin{definition} \label{def:invariance_equivariance}
+Consider random variables $X \in \mathcal{X}$ and $Y \in \mathcal{Y}$ and a group $G$ which acts measurably on both $\mathcal{X}$ and $\mathcal{Y}$.
+The conditional distribution $\prob_{Y|X}$ is then said to be
+\begin{enumerate} 
+	\item $G$-invariant if $Y|X \equdist Y| gX$,
+	\item $G$-equivariant if $Y|X \equdist gY | gX$.
+\end{enumerate}
+\end{definition}
+It is useful to assume that the marginal distribution of $X$ is invariant under $G$, so that $\prob(X) = \prob(gX)$ for all $g \in G$.
+This assumption, along with definition \ref{def:invariance_equivariance}, implies that the joint distributions are invariant
+$$
+	\prob_{X,Y}(X,Y) = \prob_{X,Y}(g X, Y),
+$$
+or equivariant
+$$
+	\prob_{X,Y}(X,Y) = \prob_{X,Y}(g X, g Y),
+$$
+respectively.
+
+Given two random variables $X$ and $Y$ whose conditional probability distribution $\prob_{Y|X}$ is $G$-invariant or $G$-equivariant, a natural question to ask is: how is $Y$ related to $X$?
+
+
+Since we are working in a machine learning setting where $X$ is the input data and $Y$ is the output of a layer in some neural network, it would be useful to be able to write $Y$ as some sort of function involving $X$.
+\textit{Noise outsourcing} allows us to do just that - given two random variables $X$ and $Y$ in Borel spaces, there exists a measurable function $f$ so that
+$$
+	(X,Y) \equas (X,f(\eta,X))
+$$
+for some $\eta \sim \UnifDist[0,1]$.
+$\eta$ can be viewed as a random variable that outsources the noise in $Y$ that cannot be explained by $X$.
+
+The version of this result that is used extensively by \cite{bloemreddy2019probabilistic} involves the situation where there exists a $\sigma(\mathcal{X})/\sigma(\mathcal{S})$-measurable statistic $S: \mathcal{X} \to \mathcal{S}$ so that $X$ and $Y$ are conditionally independent given this statistic.
+A slightly-paraphrased of this lemma from \cite{bloemreddy2019probabilistic} follows:
+\begin{lemma}
+	Let $X$ and $Y$ be random variables with joint distribution $\prob_{X,Y}$.
+	Let $\mathcal{S}$ be a standard Borel space and $S: \mathcal{X} \to \mathcal{S}$ a measurable map.
+	Then $X$ and $Y$ are conditionally independent given $S$ if and only if there is a measurable function $f: [0,1] \times \mathcal{S} \to \mathcal{Y}$ so that
+	$$
+		(X,Y) \equas (X,f(\eta,S(X)))
+	$$
+	where $\eta \sim \UnifDist[0,1]$ and $\eta \condind X$.
+\end{lemma}
+
+Another tool that \cite{bloemreddy2019probabilistic} uses is the notion of \textit{maximal invariants}.
+\begin{definition} \label{def:maximal_invariants}
+	Consider a space $\mathcal{X}$ and a group $G$ which acts on $\mathcal{X}$.
+	A maximal invariant $M$ is a function that satisfies
+	$M(x_1) = M(x_2)$ for $x_1, x_2 \in \mathcal{X}$ implies $x_2 = \bbT_g(x_1)$ for some $g \in G$.
+\end{definition}
+If one looks closely at the above definition, it easy to see that maximal invariants take on the different values on \textit{orbits} (see definition \ref{def:orbit_stabilizer} for a quick refresher) of elements in $\mathcal{X}$ with respect to $G$.
+It is then straightforward to create a maximal invariant for any group $G$ and space $\mathcal{X}$ by just defining a function $S$ that takes on unique values on each orbit.
+
+Using noise outsourcing and maximal invariants, \cite{bloemreddy2019probabilistic} determines the following relationship between random variables $X$ and $Y$ when their joint probability $\prob_{Y|X}$ is $G$-invariant:
+
+\begin{theorem} \label{thm:invariance}
+Let $X \in \mathcal{X}$ and $Y \in \mathcal{Y}$ be random variables from Borel spaces $\mathcal{X}$ and $\mathcal{Y}$.
+Assume that $\prob_{X}$ is $G$-invariant, and let $M : \mathcal{X} \to \mathcal{S}$ be a maximal invariant where $\mathcal{S}$ is another Borel space.
+Then $\prob_{Y|X}$ is $G$-invariant if and only if there exists a measurable function $f: [0,1] \times \mathcal{S} \to \mathcal{Y}$ such that
+$$
+	(X,Y) \equas (X, f(\eta,M(X)))
+$$
+with $\eta \sim \UnifDist[0,1]$ and $\eta \indep X$.
+\end{theorem} 
+To prove a similar result for the case when $\prob_{Y|X}$ is $G$-equivariant, \cite{bloemreddy2019probabilistic} defines a function similar to maximal invariants for equivariant symmetry:
+\begin{definition} \label{def:maximal_equivariant}
+Consider a set $\mathcal{X}$ and a group $G$ which acts upon $\mathcal{X}$.
+A function $\tau : \mathcal{X} \to G$ is said to be a maximal equivariant if it satisfies
+$$
+	\tau(g x) = g \cdot \tau(x).
+$$
+for $g \in G$ and $x \in \mathcal{X}$.
+\end{definition}
+
+\noindent
+\cite{bloemreddy2019probabilistic} then proves the following
+\begin{theorem} \label{thm:equivariance}
+Let $G$ be a compact group acting measurably on Borel spaces $\mathcal{X}$ and $\mathcal{Y}$.
+Let $\tau: \mathcal{X} \to G$ be a maximal equivariant.
+Consider random elements $X \in \mathcal{X}$ and $Y \in \mathcal{Y}$ such that the stabilizers of $X$ and $Y$ (see definition \ref{def:orbit_stabilizer} for a reminder) satisfy $G_X \subseteq G_Y$ almost surely.
+Suppose $\prob_X$ is $G$-invariant.
+Then $\prob_{Y|X}$ is $G$-equivariant if and only if there exists a measurable function $f:[0,1] \times \mathcal{X} \to \mathcal{Y}$ such that
+$$
+	g Y \equas f(\eta, g X)
+$$
+for all $g \in G$, and $\eta \sim \UnifDist[0,1]$ and $\eta \indep X$.
+\end{theorem}
+
+The utility of theorems \ref{thm:invariance} and \ref{thm:equivariance} is further enhanced by the following result, which states that there is a straight-forward way to combine equivariant and invariant functions to yield more equivariant or invariant functions.
+\begin{proposition} \label{prop:composition}
+Let $X,Y,Z$ be random variables such that $X \indep_Y Z$, and $G$ be a group which acts upon $X$, $Y$, and $Z$.
+Suppose further that $\prob_X(X) = \prob_X(gX)$ for any $g \in G$.
+\begin{enumerate}
+	\item
+	If $Y$ is conditionally $G$-invariant given $X$, and $Z$ is conditionally $G$-equivariant given $Y$, then $Z$ is conditionally $G$-equivariant given $X$.
+	
+	\item
+	If $Y$ is conditionally $G$-equivariant given $X$, and $Z$ is conditionally $G$-invariant given $Y$, then $Z$ is conditionally $G$-invariant given $X$.
+\end{enumerate}
+\end{proposition}
+
+With the multitude of results that are theorems \ref{thm:invariance}, \ref{thm:equivariance} and proposition \ref{prop:composition}, we now have a methodology to form deep learning algorithms that are invariant or equivariant under the action of a group $G$:
+\begin{enumerate}
+	\item Find a class of datasets $\mathcal{X}$ whose distribution $\prob_{\mathcal{X}}$ is $G$-invariant for some group $G$.
+	\item For each layer $\ell$ in the deep learning algorithm, determine whether it should be invariant or equivariant under the action of $G$, and then construct appropriate maximal invariants or equivariants.
+	\item Model each layer $Y_{\ell}$ as a noise-outsourced function of the previous layer so that $f: [0,1] \times \mathcal{Y}_{\ell-1} \to \mathcal{Y}_{\ell}$ with
+	$$
+		Y_{\ell} = f(\eta, Y_{\ell-1})
+	$$
+	where $\eta \indep Y_{\ell-1}$.
+
+\end{enumerate}
+Notice in the statement of theorem \ref{thm:equivariance}, the only condition on $f$ is that it is some measurable function from $[0,1]\times \mathcal{X}$ to $\mathcal{Y}$; no other conditions on what classes of functions make for acceptable $f$ are given.
+An open question is: what conditions on $f$ are necessary so that $f$ is constrained to be in contained in certain classes of functions?
+In particular, what are conditions are necessary for $f$ to be a convolution?
+As stated previously, the incorporation of convolutions is a popular way to create equivariant layers in a neural network, and so an answer to this question could prove useful to machine learning practitioners. 
+
+\subsection{Deterministic symmetry in machine learning}
+In the deterministic view, a machine learning algorithm is considered to be a function $f: \mathcal{X} \times \Theta \to \mathcal{Y}$ which maps an input object $x \in \mathcal{X}$ and parameters of the algorithm $\theta \in \Theta$ to a label $y \in \mathcal{Y}$, so that $y = f(x;\theta)$.
+There is no randomness captured in this formulation, and so we provide no distributional assumptions on $\mathcal{X}$ nor $\mathcal{Y}$.
+
+Each neuron of a neural network is constructed by a linear transformation of the previous layer followed by a linear/non-linear function that is evaluated pointwise; that is, the $x$th neuron in layer $\ell$ is of the form
+$$
+	f_{x}^{\ell} = \sigma \left( b_{x}^{\ell} + \sum_{y} w_{x,y}^{\ell} f_{y}^{\ell - 1} \right)
+$$
+where
+\begin{itemize}
+\item
+$b_x^{\ell}$ is the bias term for the $x$th neuron in layer $\ell$,
+\item
+$y$ denotes the $y$th neuron in the $(\ell-1)$th layer,
+\item 
+$w_{x,y}$ are weights that scale the outputs of the neurons $f_y^{\ell - 1}$ of the previous layer, and
+\item
+$\sigma$ is a function that is evaluated pointwise, which is often times non-linear such as a sigmoid function.
+\end{itemize} 
+ 
+Kondor and Trivedi \cite{kondor2018generalization} prove that any neural network whose layers are \textit{equivariant} under the action of \textit{any compact group} (see definition \ref{def:compact}) must necessarily have layers which are convolutions of the previous layer; that is, the linear transformations are of the form
+$$
+	\phi_{\ell}(f^{\ell - 1})_{(i,j)} = \sum_{u_1 = 1}^{w} \sum_{u_2 = 1}^w f^{\ell - 1}_{(i - u_1, j - u_2)} \chi_{\ell}(u_1,u_2)
+$$
+where $f^{\ell-1}$ is previous layer in the neural network, and $\chi_{\ell}$ is some \textit{filter} function that scales the values of the neurons in the previous layer.
+
+The proof of this result is very involved, drawing upon areas such as fourier analysis, group theory, and representation theory, so we will limit our discussion of Kondor and Trivedi's results.
+We will, however, discuss key definitions and theorems that will be needed for our main result in this paper. 
+
+Kondor and Trivedi take a more abstract point of view in that they consider the layers of a neural network as functions of their index sets of their neurons, and not as functions of the values of the previous layer.
+For example, let $f_{\ell}$ be the $\ell$th layer of a neural network.
+$f_{\ell}(i)$ gives the value of the $i$th neuron in layer $\ell$.
+Kondor and Trivedi first define a neural network in this slightly more abstract formalism.
+\begin{definition} \label{def:nn}
+Given an index set $\mathcal{I}$ and a vector space $V$, $L_V(\mathcal{I})$ denotes the space of functions $\{f : \mathcal{I} \to V\}$.
+	Let $\mathcal{I}_0, \ldots, \mathcal{I}_L$ be a sequence of index sets, $V_0, \ldots, V_L$ vector spaces, $\phi_1, \ldots, \phi_L$ linear maps so that
+	$$
+		\phi_\ell: L_{V_{\ell-1}}(\mathcal{I}_{\ell - 1}) \to L_{V_{\ell}}(\mathcal{I}_{\ell})
+	$$
+	and $\sigma_{\ell}: V_{\ell} \to V_{\ell}$ pointwise linear or nonlinear functions.
+	A multi-layer feed-forward neural network (MFF-NN) is a sequence of maps $f_0 \mapsto f_1 \mapsto f_2 \mapsto \ldots, \mapsto f_L$, where
+	$$
+		f_{\ell}(i) = \sigma_{\ell}( \phi_{\ell}(f_{\ell-1})(i))
+	$$
+	for index $i \in \mathcal{I}_{\ell}$.
+\end{definition}
+
+Next, Kondor and Trivedi define group actions of a group $G$ on linear maps in a neural network.
+\begin{definition}
+	Consider a function $f \in L_{V}(\mathcal{I})$ and a group that acts on $\mathcal{I}$ by a group action $\bbT$.
+	The induced group action of $G$ on $f$ is given by
+	$$
+		gf := \bbT_g(f) := f(\bbT_g(i)) = f(gi)
+	$$
+	for $g \in G$ and $i \in \mathcal{I}$.
+\end{definition}
 \begin{definition} \label{def:equi_nn}
-	Let $G$ be a group and $\mathcal{X}_1, \mathcal{X}_2$ be two sets with corresponding $G$-actions
+	Let $G$ be a group and $\mathcal{I}_1, \mathcal{I}_2$ be two sets with corresponding $G$-actions
 	$$
-		T_g: \mathcal{X}_1 \to \mathcal{X}_1,\ T_g' : \mathcal{X}_2 \to \mathcal{X}_2.
+		T_g: \mathcal{I}_1 \to \mathcal{I}_1,\ T_g' : \mathcal{I}_2 \to \mathcal{I}_2.
 	$$
-	Let $V_1$ and $V_2$ be vector spaces, and $\bbT$ and $\bbT'$ be the induced actions on $G$ on $L_{V_1}(\mathcal{X}_1)$ and $L_{V_2}(\mathcal{X}_2)$.
-	We say that a map $\phi: L_{V_1}(\mathcal{X}_1) \to L_{V_2}(\mathcal{X}_2)$ is equivariant with the action of $G$ (or $G$-equivariant for short) if
+	Let $V_1$ and $V_2$ be vector spaces, and $\bbT$ and $\bbT'$ be the induced actions of $G$ on $L_{V_1}(\mathcal{I}_1)$ and $L_{V_2}(\mathcal{I}_2)$.
+	We say that a map $\phi: L_{V_1}(\mathcal{I}_1) \to L_{V_2}(\mathcal{I}_2)$ is equivariant with the action of $G$ (or $G$-equivariant for short) if
 	$$
-		\phi(\bbT_g(f)) = \bbT'_g(\phi(f))\ \forall f \in L_{V_1}(\mathcal{X}_1)
+		\phi(\bbT_g(f)) = \bbT'_g(\phi(f))\ \forall f \in L_{V_1}(\mathcal{I}_1)
 	$$
 	for any group element $g \in G$.
 \end{definition}
 
+Then, Kondor and Trivedi defines what it means for a neural network to be equivariant under the action of a group $G$.
+
 \begin{definition}
-	Let $\mathcal{N}$ be a feed-forward neural network as defined in Definition \ref{def:nn}, and $G$ be a group that acts on each index space $\mathcal{X}_0,\ldots,\mathcal{X}_L$.
-	Let $\bbT^0,\ldots,\bbT^L$ be the corresponding group actions on $L_{V_0}(\mathcal{X}_0),\ldots,L_{V_L}(\mathcal{X}_L)$.
-	$\mathcal{N}$ is a $G$-equivariant feed-forward network if, when the inputs are transformed $f_0: \mapsto \bbT_g^0(f_0)$ for any $g \in G$, the activations of the other layers correspondingly transform as $f_\ell \mapsto \bbT_g^\ell(f_{\ell})$.
+	Let $\mathcal{N}$ be a feed-forward neural network as defined in Definition \ref{def:nn}, and $G$ be a group that acts on each index space $\mathcal{I}_0,\ldots,\mathcal{I}_L$.
+	Let $\bbT^0,\ldots,\bbT^L$ be the corresponding group actions on $L_{V_0}(\mathcal{I}_0),\ldots,L_{V_L}(\mathcal{I}_L)$.
+	$\mathcal{N}$ is a $G$-equivariant feed-forward network if, when the inputs are transformed $f_0 \mapsto \bbT_g^0(f_0)$ for any $g \in G$, the neurons of the other layers correspondingly transform as $f_\ell \mapsto \bbT_g^\ell(f_{\ell})$.
 \end{definition}
 
+Kondor and Trivedi assume that the action of $G$ on any index set $\mathcal{I}_{\ell}$ is \textit{transitive}, so that it is possible to travel from element in $\mathcal{I}$ to another by a sequence of group actions.
+That is, they assume that for any $i,j \in \mathcal{I}_{\ell}$, we have the existence of $g \in G$ so that $j = \bbT_g(i)$.
+With this in mind, we can arbitrarily set some $x_{\ell} \in \mathcal{I}_{\ell}$ to be the ``origin'', and \textit{identify} (represent) $\mathcal{I}_{\ell}$ by the \textit{quotient group} $G/G_{x_{\ell}}$ (see definition \ref{def:quotient}).
+
+Convoluting two functions is a popular tool in engineering fields such as signals engineering, where the convolution involves integration over $\bbC$.
+We can extend the notion of convolutions over complex space to convolutions over groups in the following way.
+
+
 \begin{definition} \label{def:convolution}
-	Let $G$ be a finite or countable group, $\mathcal{X}$ and $\mathcal{Y}$ be (left or right) quotient spaces of $G$, $f: \mathcal{X} \to \bbC$, and $g: \mathcal{Y} \to \bbC$.
-	We then define the convolution of $f$ with $g$ as
+	Let $G$ be a finite or countable group, $\mathcal{I}_{\ell}$ and $\mathcal{I}_{k}$ be (left or right) quotient spaces of $G$, $f: \mathcal{I}_{\ell} \to \bbC$, and $g: \mathcal{I}_{k} \to \bbC$.
+	Define $f\uparrow^G: G/G_{x_{\ell}} \to \mathbb{C}$ by
 	$$
-		(f * g)(u) = \sum_{v \in G} f \uparrow^G(uv^{-1})g\uparrow^G(v)
+		f\uparrow^G(u) := f(\bbT_u(x_{\ell})) = f(x)
+	$$
+	where $u \in G/G_{x_{\ell}}$, $x = \bbT_u(x_{\ell})$, and $x_{\ell}$ is the ``orign'' of $\mathcal{I}_{\ell}$.
+	We define $g\uparrow^G$ similarly.
+	The convolution of $f$ with $g$ is then defined as
+	$$
+		(f * g)(u) = \sum_{v \in G} f \uparrow^G(u \cdot v^{-1})g\uparrow^G(v)
 	$$
 	for some $u \in G$
 \end{definition}
 
+With this definition, Kondor and Trivedi defines convolutional neural network in this abstract formalism.
 \begin{definition}
-	Let $G$ be a compact group and $\mathcal{N}$ an $L+1$ layer feed-forward network in which the $i$th index set is $G/H_i$ for some subgroup $H_i$ of $G$.
-	We say that $\mathcal{N}$ is a $G$-convolutional neural network (or $G$-CNN) if each of the linear maps $\phi_1,\ldots,\phi_L$ in $\mathcal{N}$ is a generalized convolution (see definition \ref{def:convolution}) of the form $\phi_{\ell}(f_{\ell-1}) = f_{\ell-1} * \chi_{\ell}$ with some filter $\chi_{\ell} \in L_{V_{\ell-1} \times V_{\ell}}(H_{\ell-1}\setminus G/H_{\ell})$.
+	Let $G$ be a compact group and $\mathcal{N}$ an $L+1$ layer feed-forward network in which the $\ell$th index set identified with $G/G_{x_{\ell}}$ where $G_{x_{\ell}}$ is the stabilizer of the ``origin'' index $x_{\ell} \in \mathcal{I}_{\ell}$.
+	We say that $\mathcal{N}$ is a $G$-convolutional neural network (or $G$-CNN) if the linear maps $\phi_1,\ldots,\phi_L$ in $\mathcal{N}$ are generalized convolutions of the form $\phi_{\ell}(f_{\ell-1}) = f_{\ell-1} * \chi_{\ell}$ for filter functions $\chi_{\ell}$.
 \end{definition}
 
 
 \begin{theorem} \label{thm:gcnn}
-	Let $G$ be a compact group and $\mathcal{N}$ be an $L+1$ layer feed-forward neural network in which the $\ell$th index set is of the form $\mathcal{X}_{\ell} = G / H_{\ell}$, where $H_{\ell}$ is some subgroup of $G$.
+	Let $G$ be a compact group and $\mathcal{N}$ be an $L+1$ layer feed-forward neural network in which the $\ell$th index set is identified with $\mathcal{I}_{\ell} = G / G_{x_{\ell}}$, where $G_{x_{\ell}}$ is the stabilizer of $x_{\ell} \in I_{\ell}$.
 	Then $\mathcal{N}$ is equivariant to the action of $G$ in the sense of definition \ref{def:equi_nn} if and only if it is a $G$-CNN.
 \end{theorem}
 
+We are now prepared to prove our main result using the tools outlined in this section.
 % ...

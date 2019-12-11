@@ -13,7 +13,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % your title/author/date information go here
-\title{Probabilistic symmetry and convolutional neural networks} % replace with your title
+\title{Probabilistic equivariance and convolutional neural networks} % replace with your title
 \author{Sean La} % replace with your name
 \date{11 December 2019} % replace with your submission date
 
@@ -28,23 +28,29 @@
 \include{sections/background}
 
 % add your main body sections here
-\section{A sufficient condition for convolution structure of $Y$}
-First, we give an essential definition.
-\begin{definition} \label{def:linear}
-	A function $h: E \to F$ is linear if for $x_1, x_2 \in E$, we have
-	$$
-		h(x_1 + x_2) = h(x_1) + h(x_2)
-	$$ 
-	for all $x_1,x_2 \in E$.
-\end{definition}
-In this section, we show that equivariant $Y = f(\eta,X)$ being linear in its second argument, i.e.
+\section{A sufficient condition for convolution structure of $Y = f(\eta,X)$}
+In this section, we show that equivariant $Y = f(\eta,X)$ satisfying definition \ref{def:linear}, i.e. $Y$ being linear in its second argument so that
 $$
 	Y = f(\eta, X_1 + X_2) = Y = f(\eta,X_1) + f(\eta,X_2),
 $$
-is a sufficient condition for $Y$ to be a convolution of $X$, i.e.
+is a sufficient condition for $Y$ to be a convolution of $X$,
 $$
-	Y \equas X * \chi(\eta).
+	Y \equas X * \chi(\eta)
 $$
+for some function $\chi(\eta)$.
+
+First, we define what it means for a function to be \textit{linear}.
+\begin{definition} \label{def:linear}
+	A function $h: E \to F$ is linear if for $x_1, x_2 \in E$, we have
+	$$
+		h(x_1 + x_2) = h(x_1) + h(x_2).
+	$$ 
+\end{definition}
+
+\noindent
+
+Now, the main contribution of this project follows.
+
 \begin{theorem}
 	Consider random vectors $(X,Y)$ with index sets $\mathcal{I}_X$ and $\mathcal{I}_Y$ and a compact group $G$ which acts on $\mathcal{I}_X$ and $\mathcal{I}_Y$.
 	Moreover, suppose that $P_{X,Y}$ is $G$-equivariant.
@@ -53,7 +59,7 @@ $$
 	More generally, $(X,Y) \equas (X,X * \chi(\eta))$.
 \end{theorem}
 \begin{proof}
-Let $F(X) = f(\eta, X)$ be some realization of $Y$ so that $F(\cdot) = f(\eta, \cdot)$ is linear and $gY = f(\eta,gX)$ (the set of all such realizations has probability one since $Y$ is linear almost surely and $gY = f(\eta,gX)$ almost surely).
+Let $F(X) = f(\eta, X)$ be some realization of $Y$ so that $F(\cdot) = f(\eta, \cdot)$ is linear and $gY = f(\eta,gX)$ (the set of all such realizations has probability one since $f(\eta, \cdot)$ is linear almost surely and $gY = f(\eta,gX)$ almost surely).
 We prove this theorem by constructing an appropriate MFF-NN as in definition \ref{def:nn}, and then invoking theorem \ref{thm:gcnn}.
 
 We may consider $X$ to be a function of its index set so that $X(i)$ gives the value of $X$ at component $i$ for $i \in \mathcal{I}_X$.
@@ -73,12 +79,12 @@ Clearly, this construction matches the description of a MFF-NN given in definiti
 
 Now, define the action of group $G$ on $X$ to be the action of $G$ on its index set, so that
 $$
-	gX := \bbT_g(X) = X(g\cdot i)
+	gX := \bbT_g(X) := X(gi)
 $$
 for $i \in \mathcal{I}_{X}$ and $g \in G$.
 Similarly, define the action of $G$ on $Y$ as the action of $G$ on the its index set $\mathcal{I}_Y$, so that
 $$
-	gY := \bbT'_g(Y) = Y(g \cdot i)
+	gY := \bbT'_g(Y) = Y(g i)
 $$
 for $i \in \mathcal{I}_{Y}$ and $g \in G$.
 By assumption, we have
@@ -86,15 +92,15 @@ $$
 	\bbT'_g(Y) = gY = F(gX) = F(\bbT_g(X))
 $$
 for all $g \in G$ since $P_{X,Y}$ is $G$-equivariant.
-Therefore, the layers of $\mathcal{N}$ is equivariant under the action of $G$.
+Therefore, the layer of $\mathcal{N}$ is equivariant under the action of $G$.
 
-Because the actions of $G$ on both $\mathcal{I}_{X}$ and $\mathcal{I}_{Y}$ are transitive, we may identify the index sets of $X$ and $Y$ by quotient groups $G/H_X$ and $G/H_Y$, where $H_X$ and $H_Y$ are the stabilizer subgroups of elements chosen to be the origins of $\mathcal{I}_X$ and $\mathcal{I}_Y$, respectively.
+Because the actions of $G$ on both $\mathcal{I}_{X}$ and $\mathcal{I}_{Y}$ are transitive, we may identify the index sets of $X$ and $Y$ by quotient groups $G/G_x$ and $G/G_y$, where $G_x$ and $G_y$ are the stabilizer subgroups of elements chosen to be the origins of $\mathcal{I}_X$ and $\mathcal{I}_Y$, respectively.
 
-Therefore, by theorem \ref{thm:gcnn}, our MFF-NN $\mathcal{N}$ is a $G$-CNN, i.e. we have
+Therefore, by theorem \ref{thm:gcnn}, our MFF-NN $\mathcal{N}$ is a $G$-CNN so that
 $$
 	F(X) = X * \chi
 $$
-for some filter $\chi \in L_{V_{\ell-1} \times V_{\ell}}(H_{\ell-1} \setminus G / H_{\ell})$.
+for some filter function $\chi$.
 Letting the value of $\eta$ to vary over the subset of its range that gives $f(\eta,X)$ to be linear in $X$, it is easy to see that
 $$
 	f(\eta,X) = X * \chi(\eta).

@@ -83,6 +83,40 @@
       \verb 1802.03690
       \endverb
     \endentry
+    \entry{RomanSteven2012FoGT}{book}{}
+      \name{author}{1}{}{%
+        {{hash=a0bb63935d75258a8310acff0e05e2a3}{%
+           family={Roman},
+           familyi={R\bibinitperiod},
+           given={Steven},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \list{location}{1}{%
+        {Boston}%
+      }
+      \list{publisher}{1}{%
+        {Birkhauser Boston}%
+      }
+      \strng{namehash}{a0bb63935d75258a8310acff0e05e2a3}
+      \strng{fullhash}{a0bb63935d75258a8310acff0e05e2a3}
+      \strng{bibnamehash}{a0bb63935d75258a8310acff0e05e2a3}
+      \strng{authorbibnamehash}{a0bb63935d75258a8310acff0e05e2a3}
+      \strng{authornamehash}{a0bb63935d75258a8310acff0e05e2a3}
+      \strng{authorfullhash}{a0bb63935d75258a8310acff0e05e2a3}
+      \field{labelalpha}{Rom12}
+      \field{sortinit}{R}
+      \field{sortinithash}{da6b42bd3ab22fee61abed031ee405f7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{1}
+      \field{isbn}{9780817683009}
+      \field{title}{Fundamentals of Group Theory: An Advanced Approach}
+      \field{year}{2012}
+      \keyw{Mathematics ; Group Theory and Generalizations ; Algebra ; Order,Lattices,Ordered Algebraic Structures ; Mathematics}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

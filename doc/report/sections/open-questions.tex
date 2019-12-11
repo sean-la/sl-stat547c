@@ -3,3 +3,22 @@
 % open questions section
 
 \section{Open questions and research directions}
+This research leads to several open questions:
+\begin{enumerate}
+\item  
+We have shown that linearity of $f(\eta, \cdot)$ in the second argument is a sufficient condition for $Y = f(\eta, X) = X * \chi(\eta)$ when the group $G$ is compact.
+Can we expand these results for when the group $G$ is not compact?
+
+A possible approach to answer this question is by restricting the possible forms of the filter $\chi$.
+
+\item We have shown that the filter function is a function of the noise-outsourced variable $\eta$ so that $\chi = \chi(\eta)$.
+From an applications point of view, does adding noise to filters in a convolutional neural network increase its performance?
+For example, does adding noise to filters act as a form of regularization, similar to how drop-out layers in neural networks serve that purpose?
+
+Here are some possible ways to incorporate noise into the filter $\chi$:
+\begin{itemize}
+	\item The value of $\eta \in [0,1]$ serves as a scaling factor of the value of $\chi$.
+	\item If the value of $\eta$ is below a certain threshold, then some components of $\chi$ is set to $0$, so that certain neurons in the previous layer are not included in the current layer.
+	\item The value of $\eta$ serves as the probability that certain neurons in the previous layer are dropped, in similar vein to dropout layers.
+\end{itemize}
+\end{enumerate}
