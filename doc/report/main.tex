@@ -28,12 +28,12 @@
 \include{sections/background}
 
 % add your main body sections here
-\section{A necessary condition for convolution structure of $Y = f(\eta,X)$}
-In this section, we show that equivariant $Y = f(\eta,X)$ satisfying definition \ref{def:linear}, i.e. $Y$ being linear in its second argument so that
+\section{Sufficient conditions for convolution structure of $Y = f(\eta,X)$}
+In this section, we show that equivariant $Y = f(\eta,X)$ being linear in its second argument almost surely, so that
 $$
-	Y = f(\eta, X_1 + X_2) = Y = f(\eta,X_1) + f(\eta,X_2),
+	f(\eta, X_1 + X_2) = f(\eta,X_1) + f(\eta,X_2),
 $$
-is a sufficient condition for $Y$ to be a convolution of $X$,
+implies that $Y$ is a convolution of $X$,
 $$
 	Y \equas X * \chi(\eta)
 $$
@@ -51,15 +51,15 @@ First, we define what it means for a function to be \textit{linear}.
 
 Now, the main contribution of this project follows.
 
-\begin{theorem}
+\begin{theorem} \label{thm:convolution}
 	Consider random vectors $(X,Y)$ with index sets $\mathcal{I}_X$ and $\mathcal{I}_Y$ and a compact group $G$ which acts on $\mathcal{I}_X$ and $\mathcal{I}_Y$.
 	Moreover, suppose that $P_{X,Y}$ is $G$-equivariant.
 	Lastly, suppose that the action of $G$ on both $\mathcal{I}_X$ and $\mathcal{I}_Y$ is transitive.
-	Then if, conditioned on $X$, $Y = f(\eta, X)$ is a linear function almost surely (i.e. for some almost sure subset of the range of $\eta$), then $Y \equas X * \chi(\eta)$ in the sense of definition \ref{def:convolution}.
+	Then if, conditioned on $X$, $Y \equas f(\eta, X)$ is a linear function almost surely (i.e. for some almost sure subset of the range of $\eta$), then $Y \equas X * \chi(\eta)$ in the sense of definition \ref{def:convolution}.
 	More generally, $(X,Y) \equas (X,X * \chi(\eta))$.
 \end{theorem}
 \begin{proof}
-Let $F(X) = f(\eta, X)$ be some realization of $Y$ so that $F(\cdot) = f(\eta, \cdot)$ is linear and $gY = f(\eta,gX)$ (the set of all such realizations has probability one since $f(\eta, \cdot)$ is linear almost surely and $gY = f(\eta,gX)$ almost surely).
+Let $F(X) = f(\eta, X)$ be some realization of $Y$ so that $F(\cdot) = f(\eta, \cdot)$ is linear and $gY \equas f(\eta,gX)$ (the set of all such realizations has probability one since $f(\eta, \cdot)$ is linear almost surely and $gY \equas f(\eta,gX)$).
 We prove this theorem by constructing an appropriate MFF-NN as in definition \ref{def:nn}, and then invoking theorem \ref{thm:gcnn}.
 
 We may consider $X$ to be a function of its index set so that $X(i)$ gives the value of $X$ at component $i$ for $i \in \mathcal{I}_X$.

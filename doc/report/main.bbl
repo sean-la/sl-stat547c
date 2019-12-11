@@ -51,6 +51,34 @@
       \verb 1901.06082
       \endverb
     \endentry
+    \entry{BuhlerTheo2018Fa/T}{book}{}
+      \name{author}{1}{}{%
+        {{hash=b5bae87ad1546d62009d98094c5d2818}{%
+           family={Buhler},
+           familyi={B\bibinitperiod},
+           given={Theo},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \strng{namehash}{b5bae87ad1546d62009d98094c5d2818}
+      \strng{fullhash}{b5bae87ad1546d62009d98094c5d2818}
+      \strng{bibnamehash}{b5bae87ad1546d62009d98094c5d2818}
+      \strng{authorbibnamehash}{b5bae87ad1546d62009d98094c5d2818}
+      \strng{authornamehash}{b5bae87ad1546d62009d98094c5d2818}
+      \strng{authorfullhash}{b5bae87ad1546d62009d98094c5d2818}
+      \field{labelalpha}{Buh18}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{147044190X}
+      \field{series}{Graduate studies in mathematics ; v. 191}
+      \field{title}{Functional analysis / Theo Buhler, Dietmar A. Salamon.}
+      \field{year}{2018}
+      \keyw{Functional analysis; Spectral theory (Mathematics); Semigroups of operators; Functional analysis -- Instructional exposition (textbooks,tutorial papers,etc.); Operator theory -- Instructional exposition (textbooks,tutorial papers,etc.); Functional analysis; Semigroups of operators; Spectral theory (Mathematics)}
+    \endentry
     \entry{kondor2018generalization}{misc}{}
       \name{author}{2}{}{%
         {{hash=6abc8eb3beac1cdef82d485e69f760df}{%

@@ -3,7 +3,7 @@
 % Background section
 
 \section{Background}
-Deep learning has revolutionized the research field of machine learning due to its great accuracy and generalizability on large, high dimensional datasets. 
+Deep learning has revolutionized machine learning due to its great accuracy and generalizability on large, high dimensional datasets. 
 The convolutional neural network (CNN) architecture has become the mainstay for constructing computer vision platforms. 
 The chief design principle of CNNs is the incorporation of convolutional layers that allow the network to detect certain features in the input
 image. 
@@ -24,13 +24,13 @@ In this project, we answer this question by providing a condition that is both s
 The project report proceeds as follows.
 First, we give a brief overview of group theory that will be essential for understanding the main result of this project.
 Then, we summarize the main results of \cite{bloemreddy2019probabilistic}.
-After that, we provide key definitions and theorems from \cite{kondor2018generalization} that will prove useful for proving our main result.
+After that, we provide key definitions and theorems from \cite{kondor2018generalization} that will be useful for proving our main result.
 As the main scholarly contribution of this project, we prove that linearity of $Y = f(\eta,X)$ in the second argument, along with equivariance of $X$ and $Y$, are sufficient for $Y = X * \chi(\eta)$, i.e. $Y$ is a convolution involving $X$.
 Finally, we provide open questions and future research directions.
 
 \subsection{A gentle introduction to group theory}
 The results of both \cite{bloemreddy2019probabilistic} and \cite{kondor2018generalization} are very mathematics-heavy and involve results from a wide variety of fields of mathematics, namely group theory, fourier analysis, representation theory, and of course, probability theory.
-In this report, we assume the reader has a good working knowledge of probability theory, but it may be too much to ask for a background in these other subjects as well.
+In this report, we assume the reader has a good working knowledge of probability, but it may be too much to ask for a background in these other subjects as well.
 So then, before we get into the thick of things, we give a brief overview of group theory, and how it relates to symmetry, which was derived from \cite{RomanSteven2012FoGT}.
 Note that we will not cover fourier analysis nor representation theory, as they are not necessary to understand the main definitions and theorems of \cite{bloemreddy2019probabilistic} or \cite{kondor2018generalization}.
 
@@ -101,7 +101,7 @@ Take an element $x \in \mathcal{X}$.
 	\item
 	The orbit of $x$ is the subset of $\mathcal{X}$ defined by
 	$$
-		G \cdot x := \{ \bbT(g,x) \in X : g \in G \}.
+		G \cdot x := \{ \bbT(g,x) \in \mathcal{X} : g \in G \}.
 	$$
 	\item
 	The stabilizer of $x$ is the subset of $G$ defined by
@@ -111,7 +111,7 @@ Take an element $x \in \mathcal{X}$.
 \end{enumerate}
 \end{definition}
 
-The orbit of an element $x$ with respect to a group $G$ can be thought of as all elements that can be reached from $x$ using $G$.
+The orbit of an element $x$ with respect to a group $G$ can be thought of as all elements in $\mathcal{X}$ that can be reached from $x$ using $G$.
 One interesting property of stabilizers is that they form a \textit{subgroup} of $G$ - they satisfy all the properties described in definition \ref{def:group}.
 The proof of this is left as an exercise to the reader.
 
@@ -210,7 +210,7 @@ $$
 	(X,Y) \equas (X,f(\eta,X))
 $$
 for some $\eta \sim \UnifDist[0,1]$.
-$\eta$ can be viewed as a random variable that outsources the noise in $Y$ that cannot be explained by $X$.
+$\eta$ can be viewed as the variation in $Y$ that cannot be explained by $X$.
 
 The version of this result that is used extensively by \cite{bloemreddy2019probabilistic} involves the situation where there exists a $\sigma(\mathcal{X})/\sigma(\mathcal{S})$-measurable statistic $S: \mathcal{X} \to \mathcal{S}$ so that $X$ and $Y$ are conditionally independent given this statistic.
 A slightly-paraphrased of this lemma from \cite{bloemreddy2019probabilistic} follows:
@@ -293,7 +293,7 @@ With the multitude of results that are theorems \ref{thm:invariance}, \ref{thm:e
 
 \end{enumerate}
 Notice in the statement of theorem \ref{thm:equivariance}, the only condition on $f$ is that it is some measurable function from $[0,1]\times \mathcal{X}$ to $\mathcal{Y}$; no other conditions on what classes of functions make for acceptable $f$ are given.
-An open question is: what conditions on $f$ are necessary so that $f$ is constrained to be in contained in certain classes of functions?
+An open question is: what further conditions on $f$ are needed so that $f$ is constrained to be certain classes of functions?
 In particular, what are conditions are necessary for $f$ to be a convolution?
 As stated previously, the incorporation of convolutions is a popular way to create equivariant layers in a neural network, and so an answer to this question could prove useful to machine learning practitioners. 
 
