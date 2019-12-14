@@ -96,53 +96,53 @@ $
 \end{enumerate}
 \end{enumerate}
 
-\section{Theorem \ref{thm:convolution} in the language of Functional Analysis}
-The following section references the textbook \cite{BuhlerTheo2018Fa/T}.
-Theorem \ref{thm:convolution} states that if a random variable $Y$ is almost surely an $G$-equivariant linear function of $X$, then $Y$ is almost surely a convolution of $X$.
-Just as how we can view $\bbR^n$ as representing some geometric \textit{vector space} with notions of length and orthogonality, we can think of vector \textit{spaces} of functions in the same way, by defining an \textit{inner product} on functions.
-
-The most common inner product that you are probably aware of is the dot product on finite dimensional vector spaces denoted by $u \cdot v$.
-We can extend this notion of inner product to more abstract spaces, even spaces of infinite dimension!
-We say that a function $\langle \cdot, \cdot \rangle : V \times V \to \bbR$ is an inner product on a vector space $V$ if it satisfies the following properties for all vectors $u,v,w \in V$ and scalars $a \in \bbR$:
-\begin{enumerate}[label=(\alph*)]
-	\item symmetry: $\langle x, y \rangle = \langle y, x \rangle$,
-	\item linearity in the first argument:
-	$$
-		\langle x + y, z \rangle = \langle x, z \rangle + \langle y,z \rangle,
-	$$
-	$$
-		\langle ax, y \rangle = a \langle x,y \rangle
-	$$
-	and
-	\item 
-	positive-semidefiniteness:
-	$$
-		\langle x, x \rangle \geq 0.
-	$$
-	with $\langle x, x \rangle = 0$ if and only if $x = \textbf{0}$.
-\end{enumerate}
-One popular way to define an inner product on a space of \textit{functions} is through integration: given functions $f$ and $g$, the inner product of these two functions is given by
-$$
-	\langle f,g \rangle = \int_{\bbR} f(x) g(x)\ dx.
-$$
-Spaces of functions equipped with an inner product $\langle \cdot, \cdot \rangle$ are the central object of study in \textit{functional analysis}.
-
-One important result in functional analysis is the \textit{Reisz representation theorem}, which states that (slightly paraphrased)
-\begin{theorem}
-Let $V$ be a vector space equipped with an inner product $\langle \cdot, \cdot \rangle$, and let $V^*$ be the space of all linear functions on $V$.
-Then every linear function $f \in V^*$ can be written in the form
-$$
-	f(x) = \langle a, x \rangle
-$$ 
-for some vector $a \in V$.
-\end{theorem}
-
-With this in mind, we can rewrite theorem \ref{thm:convolution} in the language of functional analysis:
-
-\begin{theorem}
-	Consider random vectors $(X,Y)$ with index sets $\mathcal{I}_X$ and $\mathcal{I}_Y$ and a compact group $G$ which acts on $\mathcal{I}_X$ and $\mathcal{I}_Y$.
-	Moreover, suppose that $P_{X,Y}$ is $G$-equivariant.
-	Lastly, suppose that the action of $G$ on both $\mathcal{I}_X$ and $\mathcal{I}_Y$ is transitive.
-	Then if, conditioned on $X$, $Y \equas f(\eta, X)$ is the \textbf{inner product between $X$ and some vector $a(\eta)$ in a vector space $V$ almost surely} (i.e. for some almost sure subset of the range of $\eta$), then $Y \equas X * \chi(\eta)$ in the sense of definition \ref{def:convolution}.
-	More generally, $(X,Y) \equas (X,X * \chi(\eta))$.
-\end{theorem}
+%\section{Theorem \ref{thm:convolution} in the language of Functional Analysis}
+%The following section references the textbook \cite{BuhlerTheo2018Fa/T}.
+%Theorem \ref{thm:convolution} states that if a random variable $Y$ is almost surely an $G$-equivariant linear function of $X$, then $Y$ is almost surely a convolution of $X$.
+%Just as how we can view $\bbR^n$ as representing some geometric \textit{vector space} with notions of length and orthogonality, we can think of vector \textit{spaces} of functions in the same way, by defining an \textit{inner product} on functions.
+%
+%The most common inner product that you are probably aware of is the dot product on finite dimensional vector spaces denoted by $u \cdot v$.
+%We can extend this notion of inner product to more abstract spaces, even spaces of infinite dimension!
+%We say that a function $\langle \cdot, \cdot \rangle : V \times V \to \bbR$ is an inner product on a vector space $V$ if it satisfies the following properties for all vectors $u,v,w \in V$ and scalars $a \in \bbR$:
+%\begin{enumerate}[label=(\alph*)]
+%	\item symmetry: $\langle x, y \rangle = \langle y, x \rangle$,
+%	\item linearity in the first argument:
+%	$$
+%		\langle x + y, z \rangle = \langle x, z \rangle + \langle y,z \rangle,
+%	$$
+%	$$
+%		\langle ax, y \rangle = a \langle x,y \rangle
+%	$$
+%	and
+%	\item 
+%	positive-semidefiniteness:
+%	$$
+%		\langle x, x \rangle \geq 0.
+%	$$
+%	with $\langle x, x \rangle = 0$ if and only if $x = \textbf{0}$.
+%\end{enumerate}
+%One popular way to define an inner product on a space of \textit{functions} is through integration: given functions $f$ and $g$, the inner product of these two functions is given by
+%$$
+%	\langle f,g \rangle = \int_{\bbR} f(x) g(x)\ dx.
+%$$
+%Spaces of functions equipped with an inner product $\langle \cdot, \cdot \rangle$ are the central object of study in \textit{functional analysis}.
+%
+%One important result in functional analysis is the \textit{Reisz representation theorem}, which states that (slightly paraphrased)
+%\begin{theorem}
+%Let $V$ be a vector space equipped with an inner product $\langle \cdot, \cdot \rangle$, and let $V^*$ be the space of all linear functions on $V$.
+%Then every linear function $f \in V^*$ can be written in the form
+%$$
+%	f(x) = \langle a, x \rangle
+%$$ 
+%for some vector $a \in V$.
+%\end{theorem}
+%
+%With this in mind, we can rewrite theorem \ref{thm:convolution} in the language of functional analysis:
+%
+%\begin{theorem}
+%	Consider random vectors $(X,Y)$ with index sets $\mathcal{I}_X$ and $\mathcal{I}_Y$ and a compact group $G$ which acts on $\mathcal{I}_X$ and $\mathcal{I}_Y$.
+%	Moreover, suppose that $P_{X,Y}$ is $G$-equivariant.
+%	Lastly, suppose that the action of $G$ on both $\mathcal{I}_X$ and $\mathcal{I}_Y$ is transitive.
+%	Then if, conditioned on $X$, $Y \equas f(\eta, X)$ is the \textbf{inner product between $X$ and some vector $a(\eta)$ in a vector space $V$ almost surely} (i.e. for some almost sure subset of the range of $\eta$), then $Y \equas X * \chi(\eta)$ in the sense of definition \ref{def:convolution}.
+%	More generally, $(X,Y) \equas (X,X * \chi(\eta))$.
+%\end{theorem}

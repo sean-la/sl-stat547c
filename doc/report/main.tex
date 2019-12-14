@@ -15,7 +15,6 @@
 % your title/author/date information go here
 \title{Probabilistic equivariance and convolutional neural networks} % replace with your title
 \author{Sean La} % replace with your name
-\date{11 December 2019} % replace with your submission date
 
 \bibliography{../../ref/STAT_547C.bib} % add the title of your bibliography file
 
@@ -31,19 +30,20 @@
 \section{Sufficient conditions for convolution structure of $Y = f(\eta,X)$}
 In this section, we show that equivariant $Y = f(\eta,X)$ being linear in its second argument almost surely, so that
 $$
-	f(\eta, X_1 + X_2) = f(\eta,X_1) + f(\eta,X_2),
+	f(\eta, a_1X_1 + a_2X_2) = a_1f(\eta,X_1) + a_2f(\eta,X_2),
 $$
 implies that $Y$ is a convolution of $X$,
 $$
 	Y \equas X * \chi(\eta)
 $$
-for some function $\chi(\eta)$.
+for some function $\chi(\eta)$. \footnote{Edit 14 December 2019: added homogeneity of scalar multiplication in definition of linearity}
 
 First, we define what it means for a function to be \textit{linear}.
-\begin{definition} \label{def:linear}
-	A function $h: E \to F$ is linear if for $x_1, x_2 \in E$, we have
+\begin{definition} \label{def:linear}\footnote{Edit 14 December 2019: added homogeneity of scalar multiplication in definition of linearity, and clarified $E$ and $F$ should be vector spaces over the same field.}
+	Let $E$ and $F$ be vector spaces on the same field $\mathcal{F}$.	
+	A function $h: E \to F$ is linear if for $x_1, x_2 \in E$ and $a_1, a_2 \in \mathcal{F}$, we have
 	$$
-		h(x_1 + x_2) = h(x_1) + h(x_2).
+		h(a_1x_1 + a_2x_2) = a_1h(x_1) + a_2h(x_2).
 	$$ 
 \end{definition}
 
@@ -113,6 +113,27 @@ $$
 which finishes the proof.
 \end{proof}
 
+\subsection{Theorem \ref{thm:convolution} in terms of matrix multiplication}
+We can also formulate theorem \ref{thm:convolution} in the language of matrix multiplication.
+We have the following result in linear algebra:
+\begin{proposition} \label{prop:linear}
+Suppose $V_1$ and $V_2$ are finite dimensional vector spaces over the same field.
+A transformation $T: V_1 \to V_2$ is linear if and only if it can be represented as a matrix; that is, for any vector $v \in V_1$, we have
+$$
+	T(v) = Mv
+$$
+for some matrix $M$ with column space in $V_2$.
+\end{proposition}
+Theorem \ref{thm:convolution} assumes that $f(\eta, X)$ is a linear mapping between the vector spaces in which $X$ and $Y$ lie.
+Therefore, proposition \ref{prop:linear} implies that we can write
+$$
+	Y \equas M(\eta) X
+$$
+where $M(\eta)$ is a random matrix depending on $\eta$.
+This holds true even if $Y \equas X * \chi(\eta)$, as we can express the filter $\chi(\eta)$ of a convolution as a matrix $M(\eta)$, so that
+$$
+	Y \equas X * \chi(\eta) = M(\eta)X.
+$$
 % open questions section
 \include{sections/open-questions}
 
